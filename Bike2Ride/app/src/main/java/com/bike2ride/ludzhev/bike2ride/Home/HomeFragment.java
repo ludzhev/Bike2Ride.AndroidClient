@@ -16,8 +16,6 @@ import com.bike2ride.ludzhev.bike2ride.R;
 public class HomeFragment
         extends Fragment
         implements HomeContracts.View {
-
-
     private HomeContracts.Presenter mPresenter;
     private TextView mHomeContentView;
 
@@ -26,8 +24,7 @@ public class HomeFragment
     }
 
     public static HomeFragment newInstance() {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+        return new HomeFragment();
     }
 
     @Override

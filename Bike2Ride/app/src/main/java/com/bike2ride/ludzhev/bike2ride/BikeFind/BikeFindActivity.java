@@ -1,37 +1,55 @@
 package com.bike2ride.ludzhev.bike2ride.BikeFind;
 
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
 import com.bike2ride.ludzhev.bike2ride.R;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.bike2ride.ludzhev.bike2ride.base.BaseActivity;
 
-public class BikeFindActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+import java.io.Serializable;
+
+import javax.inject.Inject;
+
+public class BikeFindActivity
+        extends BaseActivity
+        implements BikeFindContracts.Router{
+    private static final String EXTRA_VIEW_STATE_KEY = "VIEW_STATE_KEY_BIKE_FIND";
+
+    @Inject
+    BikeFindContracts.Presenter mBikeFindPresenter;
+
+    private BikeFindFragment mBikeFindView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bike_find);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+    protected void onResume() {
+        mBikeFindView.setPresenter(mBikeFindPresenter);
+        super.onResume();
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+    protected void onCreate(Bundle savedInstanceState) {
+        setContentView(R.layout.activity_bike_find);
+        super.onCreate(savedInstanceState);
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(42.650947, 23.379337);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Telerik Academy"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        mBikeFindView = BikeFindFragment.newInstance();
+        BikeFindContracts.ViewState viewState = getViewState(savedInstanceState);
+        mBikeFindPresenter.setViewState(viewState);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_bike_find, mBikeFindView)
+                .commit();
+    }
+
+    private BikeFindContracts.ViewState getViewState(Bundle bundle) {
+        if (bundle == null || !bundle.containsKey(EXTRA_VIEW_STATE_KEY)) {
+            return new BikeFindViewState();
+        } else {
+            Serializable serializable = bundle.getSerializable(EXTRA_VIEW_STATE_KEY);
+            return (BikeFindContracts.ViewState) serializable;
+        }
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(EXTRA_VIEW_STATE_KEY, mBikeFindPresenter.getViewState());
     }
 }

@@ -3,6 +3,7 @@ package com.bike2ride.ludzhev.bike2ride.dagger;
 import android.app.Application;
 
 import com.bike2ride.ludzhev.bike2ride.Bike2RideApplication;
+import com.bike2ride.ludzhev.bike2ride.BikeFind.BikeFindModule;
 import com.bike2ride.ludzhev.bike2ride.Home.HomeModule;
 
 import javax.inject.Singleton;
@@ -19,6 +20,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
         ActivityBindingModule.class,
         AndroidSupportInjectionModule.class,
         HomeModule.class,
+        BikeFindModule.class,
 })
 public interface AppComponent extends AndroidInjector<DaggerApplication> {
     void inject(Bike2RideApplication application);

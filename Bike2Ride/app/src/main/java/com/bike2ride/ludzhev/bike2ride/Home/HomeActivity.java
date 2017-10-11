@@ -3,15 +3,14 @@ package com.bike2ride.ludzhev.bike2ride.Home;
 import android.os.Bundle;
 
 import com.bike2ride.ludzhev.bike2ride.R;
+import com.bike2ride.ludzhev.bike2ride.base.BaseActivity;
 
 import java.io.Serializable;
 
 import javax.inject.Inject;
 
-import dagger.android.support.DaggerAppCompatActivity;
-
 public class HomeActivity
-        extends DaggerAppCompatActivity
+        extends BaseActivity
         implements HomeContracts.Router {
 
     private static final String EXTRA_VIEW_STATE_KEY = "VIEW_STATE_KEY_HOME";
